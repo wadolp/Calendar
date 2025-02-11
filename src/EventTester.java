@@ -55,7 +55,7 @@ public class EventTester {
         return (
                 lastDeadline.getName().equals(lastDeadlineName)
                         && lastDeadline.getDateTime().equals(deadline)
-                        && firstMeeting.getEndDateTime().equals(end)
+                        && firstMeeting.getEndTime().equals(end)
                         && firstMeeting.getLocation().equals(location)
         );
     }
@@ -71,7 +71,7 @@ public class EventTester {
         boolean passed = (
                 lastDeadline.getName().equals(lastDeadlineNameAlt)
                         && lastDeadline.getDateTime().equals(deadline.minusDays(INCREMENT))
-                        && firstMeeting.getEndDateTime().equals(end.plusDays(INCREMENT))
+                        && firstMeeting.getEndTime().equals(end.plusDays(INCREMENT))
                         && firstMeeting.getLocation().equals(locationAlt)
         );
 

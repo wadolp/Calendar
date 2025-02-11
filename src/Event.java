@@ -5,7 +5,8 @@ abstract class Event implements Comparable<Event> {
     LocalDateTime dateTime;
 
     Event(String name, LocalDateTime dateTime) {
-
+        this.name = name;
+        this.dateTime = dateTime;
     }
 
     public String getName() {
