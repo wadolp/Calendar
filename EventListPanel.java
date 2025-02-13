@@ -1,6 +1,8 @@
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 // Main panel containing event list and controls
 class EventListPanel extends JPanel {
@@ -9,6 +11,9 @@ class EventListPanel extends JPanel {
     private JPanel controlPanel;
     private JComboBox<String> sortDropDown;
     private JPanel filterPanel;
+    private JCheckBox completeFilter;
+    private JCheckBox deadlineFilter;
+    private JCheckBox meetingFilter;
 
     public EventListPanel() {
         events = new ArrayList<>();
@@ -23,21 +28,19 @@ class EventListPanel extends JPanel {
         sortDropDown = new JComboBox<>(sortOptions);
         sortDropDown.addActionListener(e -> sortEvents());
         controlPanel.add(sortDropDown);
-        
-        // Add filter checkboxes
+
+        // Create filter panel
         filterPanel = new JPanel();
         filterPanel.setBorder(BorderFactory.createTitledBorder("Filters"));
-        JCheckBox completeFilter = new JCheckBox("Hide Completed");
-        JCheckBox deadlineFilter = new JCheckBox("Hide Deadlines");
-        JCheckBox meetingFilter = new JCheckBox("Hide Meetings");
+        
+        completeFilter = new JCheckBox("Hide Completed");
+        deadlineFilter = new JCheckBox("Hide Deadlines");
+        meetingFilter = new JCheckBox("Hide Meetings");
         
         // Add anonymous class for filter listener
-        completeFilter.addActionListener(new java.awt.event.ActionListener() {
-            @Override
-            public void actionPerformed(java.awt.event.ActionEvent e) {
-                updateDisplay();
-            }
-        });
+        completeFilter.addActionListener(e -> updateDisplay());
+        deadlineFilter.addActionListener(e -> updateDisplay());
+        meetingFilter.addActionListener(e -> updateDisplay());
         
         filterPanel.add(completeFilter);
         filterPanel.add(deadlineFilter);
@@ -70,15 +73,44 @@ class EventListPanel extends JPanel {
 
     private void updateDisplay() {
         displayPanel.removeAll();
-        for (Event event : events) {
+        for (Event event : getFilteredEvents()) {
             displayPanel.add(new EventPanel(event));
         }
         displayPanel.revalidate();
         displayPanel.repaint();
     }
 
+    private ArrayList<Event> getFilteredEvents() {
+        ArrayList<Event> filteredEvents = new ArrayList<>();
+        for (Event event : events) {
+            if (completeFilter.isSelected() && event instanceof Completable && ((Completable) event).isComplete()) {
+                continue;
+            }
+            if (deadlineFilter.isSelected() && event instanceof Deadline) {
+                continue;
+            }
+            if (meetingFilter.isSelected() && event instanceof Meeting) {
+                continue;
+            }
+            filteredEvents.add(event);
+        }
+        return filteredEvents;
+    }
+
     private void sortEvents() {
         // Implement sorting based on sortDropDown selection
-        // This would use the Event's compareTo method
+        String selectedSort = (String) sortDropDown.getSelectedItem();
+        if ("Sort by Name".equals(selectedSort)) {
+            Collections.sort(events, Comparator.comparing(Event::getName));
+        } else if ("Sort by Date".equals(selectedSort)) {
+            Collections.sort(events, Comparator.comparing(Event::getDateTime));
+        }
+        else if ("Sort by Name (Reverse)".equals(selectedSort)) {
+            Collections.sort(events, Comparator.comparing(Event::getName).reversed());
+        } else if ("Sort by Date (Reverse)".equals(selectedSort)) {
+            Collections.sort(events, Comparator.comparing(Event::getDateTime).reversed());
+        }
+        updateDisplay();
+        
     }
 }

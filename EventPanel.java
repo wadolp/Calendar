@@ -30,13 +30,16 @@ class EventPanel extends JPanel {
         add(infoPanel, BorderLayout.CENTER);
         
         // Add complete button for Completable events
-        if (event instanceof Completable) {
+        if (event instanceof Completable && !((Completable) event).isComplete()) {
             completeButton = new JButton("Mark Complete");
             completeButton.addActionListener(e -> {
                 ((Completable) event).complete();
                 completeButton.setEnabled(false);
             });
             add(completeButton, BorderLayout.EAST);
+        }
+        else {
+            add(new JLabel("Completed"), BorderLayout.EAST);
         }
     }
 }
