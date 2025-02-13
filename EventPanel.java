@@ -1,8 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
-import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 // Panel for displaying individual events
 class EventPanel extends JPanel {

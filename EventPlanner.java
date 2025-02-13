@@ -1,8 +1,5 @@
 import javax.swing.*;
-import java.awt.*;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 
 // Main application window
 public class EventPlanner extends JFrame {
