@@ -34,12 +34,18 @@ class EventPanel extends JPanel {
             completeButton = new JButton("Mark Complete");
             completeButton.addActionListener(e -> {
                 ((Completable) event).complete();
-                completeButton.setEnabled(false);
+                remove(completeButton);
+                JButton completedButton = new JButton("Completed");
+                completedButton.setEnabled(false);
+                add(completedButton, BorderLayout.EAST);
+                revalidate();
+                repaint();
             });
             add(completeButton, BorderLayout.EAST);
-        }
-        else {
-            add(new JLabel("Completed"), BorderLayout.EAST);
+        } else {
+            JButton completedButton = new JButton("Completed");
+            completedButton.setEnabled(false);
+            add(completedButton, BorderLayout.EAST);
         }
     }
 }
